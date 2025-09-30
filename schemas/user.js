@@ -1,10 +1,17 @@
 import mongoose from 'mongoose'
-import validate from 'mongoose-validator'
 import bcrypt from 'bcrypt'
 
 const Schema = mongoose.Schema
 const { ObjectId } = Schema.Types
-const emailValidator = validate({ validator: 'isEmail' })
+
+// Email validation using regex (more secure than mongoose-validator)
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const emailValidator = {
+  validator: function (v) {
+    return emailRegex.test(v)
+  },
+  message: 'Please provide a valid email address',
+}
 
 const governmentIdTypes = ['cuil', 'cuit', 'dni', 'lc', 'le', 'pas']
 
