@@ -22,9 +22,5 @@ export const up = async (db) => {
 }
 
 export const down = async (db) => {
-  await db.collection('roles').deleteMany({
-    _id: {
-      $in: initialRoles.map((role) => role._id),
-    },
-  })
+  await db.collection('roles').deleteMany({ _id: { $in: initialRoles.map((role) => role._id) } })
 }

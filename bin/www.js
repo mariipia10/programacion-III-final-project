@@ -4,8 +4,15 @@ import debug from 'debug'
 import http from 'http'
 import figlet from 'figlet'
 import mongoose from 'mongoose'
-import pkg from '../package.json' with { type: 'json' }
+import { readFileSync } from 'fs'
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
 import dotenv from 'dotenv'
+
+// Read package.json without experimental import
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const pkg = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf8'))
 
 debug('base-api-express-generator:server')
 

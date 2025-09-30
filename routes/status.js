@@ -1,5 +1,12 @@
 import express from 'express'
-import pkg from '../package.json' with { type: 'json' }
+import { readFileSync } from 'fs'
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
+
+// Read package.json without experimental import
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const pkg = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf8'))
 
 const router = express.Router()
 
