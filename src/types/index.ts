@@ -40,6 +40,8 @@ export interface JWTPayload {
 declare module 'express-serve-static-core' {
   interface Request {
     user?: JWTPayload
+    isAdmin?(): boolean
+    isClient?(): boolean
   }
 }
 

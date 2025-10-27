@@ -11,7 +11,7 @@
     "prettify": "prettier --write '**/*.{js,ts,json,md}'",
     "lint": "eslint .",
     "lint:ts": "eslint 'src/**/*.{ts,tsx}'",
-    "type-check": "tsc --noEmit",
+    "ts:check": "tsc --noEmit",
     "migrate": "migrate-mongo",
     "migrate-dev": "NODE_ENV=development migrate-mongo",
     "clean": "rm -rf dist"

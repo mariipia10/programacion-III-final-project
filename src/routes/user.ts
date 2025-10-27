@@ -104,7 +104,7 @@ async function updateUser(
     return
   }
 
-  if (!req.isAdmin() && req.params.id !== req.user?._id) {
+  if (!req.isAdmin?.() && req.params.id !== req.user?._id) {
     res.status(403).send('Unauthorized')
     return
   }

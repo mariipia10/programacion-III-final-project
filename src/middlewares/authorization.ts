@@ -6,13 +6,15 @@ interface AuthenticatedRequest extends Request {
   isClient(): boolean
 }
 
-function authorization(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
-  req.isAdmin = function isAdmin(): boolean {
-    return !!(req.user && req.user.role === 'admin')
+function authorization(req: Request, res: Response, next: NextFunction): void {
+  const authReq = req as AuthenticatedRequest
+
+  authReq.isAdmin = function isAdmin(): boolean {
+    return !!(authReq.user && authReq.user.role === 'admin')
   }
 
-  req.isClient = function isClient(): boolean {
-    return !!(req.user && req.user.role === 'client')
+  authReq.isClient = function isClient(): boolean {
+    return !!(authReq.user && authReq.user.role === 'client')
   }
 
   return next()
