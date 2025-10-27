@@ -14,6 +14,7 @@
     "ts:check": "tsc --noEmit",
     "migrate": "migrate-mongo",
     "migrate-dev": "NODE_ENV=development migrate-mongo",
+    "check:all": "npm run ts:check && npm run lint:ts && npm run prettify",
     "clean": "rm -rf dist"
   },
   "dependencies": {
