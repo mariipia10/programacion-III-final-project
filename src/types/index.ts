@@ -79,3 +79,65 @@ export interface EnvironmentVariables {
   JWT_SECRET?: string
   JWT_ISSUER?: string
 }
+
+// Service Types
+export type ServiceCategory = 'streaming' | 'software' | 'course' | 'other'
+export type BillingCycle = 'monthly' | 'yearly'
+
+export interface IService extends Document {
+  _id: Types.ObjectId
+  name: string
+  description?: string
+  category: ServiceCategory
+  price: number
+  billingCycle: BillingCycle
+  isActive: boolean
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+// Subscription Types
+export type SubscriptionStatus = 'active' | 'canceled' | 'expired' | 'pending'
+
+export interface ISubscription extends Document {
+  _id: Types.ObjectId
+  user: Types.ObjectId // ref: User
+  service: Types.ObjectId // ref: Service
+  status: SubscriptionStatus
+  startDate: Date
+  endDate?: Date
+  nextBillingDate: Date
+  autoRenew: boolean
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+// Payment Types
+export type PaymentStatus = 'paid' | 'failed' | 'pending'
+
+export interface IPayment extends Document {
+  _id: Types.ObjectId
+  subscription: Types.ObjectId // ref: Subscription
+  amount: number
+  dueDate: Date
+  paidAt?: Date
+  status: PaymentStatus
+  method?: string
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+// Notification Types
+export type NotificationType = 'renewal_reminder' | 'payment_failed' | 'generic'
+
+export interface INotification extends Document {
+  _id: Types.ObjectId
+  user: Types.ObjectId // ref: User
+  subscription?: Types.ObjectId // ref: Subscription (opcional)
+  type: NotificationType
+  message: string
+  isRead: boolean
+  sentAt: Date
+  createdAt?: Date
+  updatedAt?: Date
+}

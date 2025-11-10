@@ -8,7 +8,7 @@ import authRouter from './routes/auth'
 import userRouter from './routes/user'
 import authentication from './middlewares/authentication'
 import authorization from './middlewares/authorization'
-
+import serviceRouter from './routes/service'
 const app = express()
 
 app.use(logger('dev'))
@@ -21,5 +21,6 @@ app.use(authorization)
 app.use('/', statusRouter)
 app.use('/auth', authRouter)
 app.use('/users', authentication, userRouter)
+app.use('/services', serviceRouter)
 
 export default app
