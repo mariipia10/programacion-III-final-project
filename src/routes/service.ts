@@ -1,15 +1,29 @@
-import express from 'express'
+// src/routes/service.ts
+import express, { Request, Response, NextFunction } from 'express'
 import Service from '../schemas/service'
 import authentication from '../middlewares/authentication'
 
 const router = express.Router()
-console.log('>> services router loaded')
 
-// Crear nuevo servicio (solo admin)
-router.post('/', authentication, async (req, res) => {
+router.get('/', getAllServices)
+router.post('/', authentication, createService)
+
+async function getAllServices(req: Request, res: Response, next: NextFunction): Promise<void> {
+  console.log('getAllServices by user', req.user?._id)
   try {
-    // Validate and sanitize input
+    const services = await Service.find()
+    res.send(services)
+  } catch (err) {
+    next(err)
+  }
+}
+
+async function createService(req: Request, res: Response, next: NextFunction): Promise<void> {
+  console.log('createService body:', req.body)
+
+  try {
     const { name, description, price } = req.body
+
     if (
       !name ||
       typeof name !== 'string' ||
@@ -18,31 +32,28 @@ router.post('/', authentication, async (req, res) => {
       price === undefined ||
       typeof price !== 'number'
     ) {
-      return res.status(400).json({ error: 'Invalid input data' })
+      res.status(400).json({ error: 'Invalid input data' })
+      return
     }
 
-    // simple inline admin check - adapt to your req.user shape
     const user = req.user
     if (!user || user.role !== 'admin') {
-      return res.status(403).json({ error: 'Forbidden: admin only' })
+      res.status(403).json({ error: 'Forbidden: admin only' })
+      return
     }
 
-    const sanitizedService = { name: name.trim(), description: description.trim(), price }
-    const newService = await Service.create(sanitizedService)
-    return res.status(201).json(newService)
-  } catch (error) {
-    return res.status(500).json({ error: (error as Error).message })
-  }
-})
+    const newService = await Service.create({
+      name: name.trim(),
+      description: description.trim(),
+      price,
+      // si más adelante querés volver a createdBy, acá lo agregás
+      // createdBy: user._id,
+    })
 
-// Listar servicios (public)
-router.get('/', async (req, res) => {
-  try {
-    const services = await Service.find()
-    res.json(services)
-  } catch (error) {
-    res.status(500).json({ error: (error as Error).message })
+    res.status(201).send(newService)
+  } catch (err) {
+    next(err)
   }
-})
+}
 
 export default router
