@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
-import { ISubscription } from '../types/index'
+import { ISubscription } from '../types'
 
 const { ObjectId } = Schema.Types
 
@@ -7,15 +7,18 @@ const subscriptionSchema = new Schema<ISubscription>(
   {
     user: { type: ObjectId, ref: 'User', required: true },
     service: { type: ObjectId, ref: 'Service', required: true },
+
     status: {
       type: String,
-      enum: ['active', 'canceled', 'expired', 'pending'],
+      enum: ['active', 'paused', 'cancelled', 'expired'],
       default: 'active',
     },
+
     startDate: { type: Date, required: true },
     endDate: { type: Date },
-    nextBillingDate: { type: Date, required: true },
+
     autoRenew: { type: Boolean, default: true },
+    nextBillingDate: { type: Date },
   },
   { timestamps: true },
 )

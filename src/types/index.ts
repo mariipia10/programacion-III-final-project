@@ -106,8 +106,8 @@ export interface ISubscription extends Document {
   status: SubscriptionStatus
   startDate: Date
   endDate?: Date
-  nextBillingDate: Date
   autoRenew: boolean
+  nextBillingDate?: Date
   createdAt?: Date
   updatedAt?: Date
 }
@@ -132,12 +132,52 @@ export type NotificationType = 'renewal_reminder' | 'payment_failed' | 'generic'
 
 export interface INotification extends Document {
   _id: Types.ObjectId
-  user: Types.ObjectId // ref: User
-  subscription?: Types.ObjectId // ref: Subscription (opcional)
-  type: NotificationType
+  user: Types.ObjectId
+  title: string
   message: string
-  isRead: boolean
-  sentAt: Date
+  subscription?: Types.ObjectId
+  payment?: Types.ObjectId
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+//Provider Types
+// ...existing code...
+
+// Provider Types
+export interface IProvider extends Document {
+  _id: Types.ObjectId
+  name: string
+  description?: string
+  website?: string
+  contactEmail?: string
+  isActive: boolean
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+// Request type for creating a provider (without auto-generated fields)
+export interface CreateProviderRequest {
+  name: string
+  description?: string
+  website?: string
+  contactEmail?: string
+  isActive?: boolean
+}
+
+// ...existing code...
+//Service Types
+export type BillingPeriod = 'monthly' | 'yearly'
+
+export interface IService extends Document {
+  _id: Types.ObjectId
+  provider: Types.ObjectId //id provider
+  name: string
+  description?: string
+  price: number
+  currency: string
+  billingPeriod: BillingPeriod
+  isActive: boolean
   createdAt?: Date
   updatedAt?: Date
 }

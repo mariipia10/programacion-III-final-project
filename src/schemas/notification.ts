@@ -1,20 +1,17 @@
 import mongoose, { Schema } from 'mongoose'
-import { INotification } from '../types/index'
+import { INotification } from '../types'
 
 const { ObjectId } = Schema.Types
 
 const notificationSchema = new Schema<INotification>(
   {
     user: { type: ObjectId, ref: 'User', required: true },
-    subscription: { type: ObjectId, ref: 'Subscription', required: true },
-    type: {
-      type: String,
-      enum: ['renewal_reminder', 'payment_failed', 'generic'],
-      default: 'generic',
-    },
+
+    title: { type: String, required: true, trim: true },
     message: { type: String, required: true, trim: true },
-    isRead: { type: Boolean, default: false },
-    sentAt: { type: Date, default: Date.now },
+
+    subscription: { type: ObjectId, ref: 'Subscription' },
+    payment: { type: ObjectId, ref: 'Payment' },
   },
   { timestamps: true },
 )
