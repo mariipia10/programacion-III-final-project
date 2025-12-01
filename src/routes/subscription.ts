@@ -35,7 +35,8 @@ async function createSubscription(
     const { serviceId, autoRenew } = req.body
 
     if (!serviceId) {
-      res.status(400).json({ error: 'serviceId is required' })
+      res.status(400).json({ error: 'serviceId is required' }).end()
+      
       return
     }
 
@@ -44,27 +45,19 @@ async function createSubscription(
       res.status(401).json({ error: 'Unauthorized' })
       return
     }
-
-    // Valido solo clientes
     if (!req.isClient?.() && user.role !== 'client') {
       res.status(403).json({ error: 'Only clients can subscribe' })
       return
     }
-
-    // Buscar
     const service = await Service.findById(serviceId)
     if (!service) {
       res.status(404).json({ error: 'Service not found' })
       return
     }
-
-    // Validar si el servicio está activo
     if (service.isActive === false) {
       res.status(400).json({ error: 'Service is inactive' })
       return
     }
-
-    // Evitar duplicar suscripción activa del mismo usuario
     const existing = await Subscription.findOne({
       user: user._id,
       service: serviceId,

@@ -22,17 +22,11 @@ async function createService(req: Request, res: Response, next: NextFunction): P
   console.log('createService body:', req.body)
 
   try {
-    const { name, description, price } = req.body
+    const { provider, name, description, price, currency, billingPeriod, isActive } = req.body
 
-    if (
-      !name ||
-      typeof name !== 'string' ||
-      !description ||
-      typeof description !== 'string' ||
-      price === undefined ||
-      typeof price !== 'number'
-    ) {
-      res.status(400).json({ error: 'Invalid input data' })
+    // Validaciones
+    if (!provider || !name || !description || price === undefined || !currency || !billingPeriod) {
+      res.status(400).json({ error: 'Missing required fields' })
       return
     }
 
@@ -43,14 +37,16 @@ async function createService(req: Request, res: Response, next: NextFunction): P
     }
 
     const newService = await Service.create({
+      provider,
       name: name.trim(),
       description: description.trim(),
       price,
-      // si más adelante querés volver a createdBy, acá lo agregás
-      // createdBy: user._id,
+      currency: currency.trim(),
+      billingPeriod,
+      isActive: isActive ?? true,
     })
 
-    res.status(201).send(newService)
+    res.status(201).json(newService)
   } catch (err) {
     next(err)
   }
