@@ -136,21 +136,8 @@ async function updateUser(
       const passEncrypted = await bcrypt.hash(req.body.password, 10)
       req.body.password = passEncrypted
     }
-
-    // This will return the previous status
     await userToUpdate.updateOne(req.body)
     res.send(userToUpdate)
-
-    // This return the current status
-    // userToUpdate.password = req.body.password
-    // userToUpdate.role = req.body.role
-    // userToUpdate.firstName = req.body.firstName
-    // userToUpdate.lastName = req.body.lastName
-    // userToUpdate.phone = req.body.phone
-    // userToUpdate.bornDate = req.body.bornDate
-    // userToUpdate.isActive = req.body.isActive
-    // await userToUpdate.save()
-    // res.send(userToUpdate)
   } catch (err) {
     next(err)
   }

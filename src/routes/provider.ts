@@ -4,22 +4,10 @@ import { CreateProviderRequest } from '../types/index'
 
 const router = Router()
 
-// GET /api/providers
 //router.get('/', getProviders)
-
-// GET /api/providers/:id
 //router.get('/:id', getProviderById)
-
-// POST /api/providers
 router.post('/', createProvider)
-
-// PUT /api/providers/:id
 router.put('/:id', updateProvider)
-
-// DELETE /api/providers/:id
-//router.delete('/:id', deleteProvider)
-
-// ...existing code...
 
 async function createProvider(
   req: Request<Record<string, never>, unknown, CreateProviderRequest>,
@@ -73,7 +61,5 @@ async function updateProvider(
     next(err)
   }
 }
-
-// ...existing code...
 
 export default router
