@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
-import type { User, Role } from '../types/user'
+import { type User, type Role, ROLES } from '../types/User'
 import { loginRequest } from '../services/authService'
 
 type UserContextType = {
@@ -18,23 +18,16 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'))
   const [loading, setLoading] = useState(true)
 
-  // normaliza el rol, por si en algún momento viene como string raro u objeto
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const normalizeRole = (role: any): Role => {
-    if (!role) return 'user'
-    if (typeof role === 'string') {
-      const r = role.toLowerCase()
-      if (r === 'admin' || r === 'provider' || r === 'user') return r
-      return 'user'
-    }
-    if (role.name) {
-      const r = String(role.name).toLowerCase()
-      if (r === 'admin' || r === 'provider' || r === 'user') return r
-    }
-    return 'user'
+    const raw = typeof role === 'string' ? role : role?.name
+    const normalized = String(raw || '')
+      .toLowerCase()
+      .trim()
+    const valid = ROLES.includes(normalized as Role) ? (normalized as Role) : 'user'
+    return valid
   }
 
-  // Cargar usuario y token desde localStorage
   useEffect(() => {
     const savedUser = localStorage.getItem('user')
     const savedToken = localStorage.getItem('token')
@@ -54,7 +47,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
     setLoading(false)
   }, [])
 
-  // Sincronizar localStorage cuando cambian user/token
   useEffect(() => {
     if (user && token) {
       localStorage.setItem('user', JSON.stringify(user))
@@ -79,7 +71,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
       localStorage.setItem('user', JSON.stringify(normalizedUser))
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.error('Error al iniciar sesión:', error)
       throw new Error(error.message || 'Credenciales inválidas')
     } finally {
       setLoading(false)

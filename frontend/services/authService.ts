@@ -1,5 +1,5 @@
 import api from '../config/api'
-import { type LoginResponse } from '../types/user'
+import { type LoginResponse } from '../types/User'
 
 export interface LoginInput {
   email: string

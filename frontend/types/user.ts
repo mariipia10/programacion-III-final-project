@@ -1,4 +1,5 @@
-export type Role = 'admin' | 'provider' | 'user'
+export const ROLES = ['admin', 'provider', 'user'] as const
+export type Role = (typeof ROLES)[number]
 
 export interface User {
   _id: string
@@ -6,7 +7,7 @@ export interface User {
   firstName: string
   lastName: string
   phone?: string
-  role: Role // viene como "admin" en el ejemplo de auth
+  role: Role
   isActive: boolean
   governmentId?: {
     type: 'cuil' | 'cuit' | 'dni' | 'lc' | 'le' | 'pas'
