@@ -76,7 +76,10 @@ async function createUser(
       res.status(404).send('Role not found')
       return
     }
-
+    if (user.role === 'provider' && !user.provider) {
+      res.status(400).send('Provider reference is required for provider users')
+      return
+    }
     const passEncrypted = await bcrypt.hash(user.password, 10)
 
     const userCreated = await User.create({

@@ -6,6 +6,7 @@ export interface IUser extends Document {
   email: string
   password: string
   role: Types.ObjectId
+  provider: Types.ObjectId
   firstName: string
   lastName: string
   phone?: string
@@ -63,6 +64,7 @@ export interface CreateUserRequest {
   email: string
   password: string
   role: string
+  provider?: string
   firstName: string
   lastName: string
   phone?: string
