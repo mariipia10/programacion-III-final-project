@@ -1,4 +1,4 @@
-export const ROLES = ['admin', 'provider', 'user'] as const
+export const ROLES = ['admin', 'provider', 'client'] as const
 export type Role = (typeof ROLES)[number]
 
 export interface User {

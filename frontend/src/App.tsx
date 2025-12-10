@@ -4,14 +4,17 @@ import Login from '../pages/Login'
 import PrivateRoute from '../routes/PrivateRoute'
 import Home from '../pages/Home'
 import AppLayout from '../components/layouts/AppLayout'
+import RegisterPage from '../pages/RegisterPage'
 
 function App() {
   return (
     <UserProvider>
       <BrowserRouter>
         <Routes>
+          {/* públicas */}
           <Route path="/login" element={<Login />} />
-
+          <Route path="/register" element={<RegisterPage />} />
+          {/* protegidas */}
           <Route
             path="/"
             element={

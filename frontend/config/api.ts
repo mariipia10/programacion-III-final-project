@@ -26,5 +26,11 @@ api.interceptors.response.use(
     return Promise.reject(error)
   },
 )
+export interface RegisterPayload {
+  name: string
+  email: string
+  password: string
+  role: 'client' | 'provider'
+}
 
 export default api

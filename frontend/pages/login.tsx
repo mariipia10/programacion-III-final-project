@@ -1,8 +1,7 @@
-import React from 'react'
-import { Box, Button, Container, TextField, Typography, Paper } from '@mui/material'
+import { Box, Button, Container, TextField, Typography, Paper, Link } from '@mui/material'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link as RouterLink } from 'react-router-dom'
 import { useUser } from '../context/UserContext'
 
 const LoginSchema = Yup.object().shape({
@@ -21,6 +20,13 @@ export default function Login() {
           Iniciar sesión
         </Typography>
 
+        {/* ...dentro del JSX de Login... */}
+        <p style={{ marginTop: 16 }}>
+          ¿No tenés cuenta?{' '}
+          <Link component={RouterLink} to="/register">
+            Registrate
+          </Link>
+        </p>
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={LoginSchema}

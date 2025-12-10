@@ -21,6 +21,11 @@ function getToken(req: Request, next: NextFunction): string | void {
 }
 
 function authentication(req: Request, res: Response, next: NextFunction): void {
+  const publicPaths = ['/', '/status', '/register', '/auth/register', '/auth/login']
+
+  if (publicPaths.includes(req.path)) {
+    return next()
+  }
   if (!req.headers.authorization) {
     console.error('Missing authorization header')
     return next(new createError.Unauthorized())

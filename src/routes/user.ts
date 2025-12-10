@@ -174,4 +174,5 @@ async function deleteUser(
   }
 }
 
+export { createUser }
 export default router
