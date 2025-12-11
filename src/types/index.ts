@@ -31,7 +31,7 @@ export interface IRole extends Document {
 export interface JWTPayload {
   _id: string
   email: string
-  role: string
+  role: 'admin' | 'provider' | 'client'
   iat?: number
   exp?: number
   iss?: string

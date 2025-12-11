@@ -1,5 +1,5 @@
 // src/api/registration.api.ts
-import api from '../config/api'
+import api from './api'
 
 export type GovernmentIdType = 'cuil' | 'cuit' | 'dni' | 'lc' | 'le' | 'pas'
 
