@@ -13,22 +13,22 @@ type MenuItemConfig = {
 const MENU_ITEMS: MenuItemConfig[] = [
   { label: 'Dashboard', path: '/', roles: ['admin'] },
   { label: 'Usuarios', path: '/admin/users', roles: ['admin'] },
-  { label: 'Servicios', path: '/services', roles: ['admin', 'provider'] },
+  { label: 'Servicios', path: '/admin/services/new', roles: ['admin', 'provider'] },
   {
     label: 'Subscripciones de mis servicios',
     path: '/provider/subscriptions',
     roles: ['provider'],
   },
-  { label: 'Mis suscripciones', path: '/subscriptions', roles: ['user'] },
+  { label: 'Mis suscripciones', path: '/subscriptions', roles: ['client'] },
   {
     label: 'Historial de pagos',
     path: '/payments',
-    roles: ['admin', 'provider', 'user'],
+    roles: ['admin', 'provider', 'client'],
   },
   {
     label: 'Notificaciones',
     path: '/notifications',
-    roles: ['admin', 'provider', 'user'],
+    roles: ['admin', 'provider', 'client'],
   },
 ]
 
