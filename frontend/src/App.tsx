@@ -5,6 +5,7 @@ import PrivateRoute from '../routes/PrivateRoute'
 import Home from '../pages/Home'
 import AppLayout from '../components/layouts/AppLayout'
 import RegisterPage from '../pages/RegisterPage'
+import AdminCreateServicePage from '../pages/AdminCreateServicePage'
 
 function App() {
   return (
@@ -21,6 +22,16 @@ function App() {
               <PrivateRoute>
                 <AppLayout>
                   <Home />
+                </AppLayout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/services/new"
+            element={
+              <PrivateRoute>
+                <AppLayout>
+                  <AdminCreateServicePage />
                 </AppLayout>
               </PrivateRoute>
             }

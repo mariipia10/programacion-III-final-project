@@ -20,7 +20,7 @@ async function getAllServices(req: Request, res: Response, next: NextFunction): 
 
 async function createService(req: Request, res: Response, next: NextFunction): Promise<void> {
   console.log('createService body:', req.body)
-
+  console.log('createService user:', req.user)
   try {
     const { provider, name, description, price, currency, billingPeriod, isActive } = req.body
 
@@ -31,6 +31,7 @@ async function createService(req: Request, res: Response, next: NextFunction): P
     }
 
     const user = req.user
+    console.log(user)
     if (!user || user.role !== 'admin') {
       res.status(403).json({ error: 'Forbidden: admin only' })
       return
