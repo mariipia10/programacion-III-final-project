@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Box, Typography, Button } from '@mui/material'
+import { AppBar, Toolbar, Typography, Button, Box, Container, Tooltip, Chip } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '../../context/UserContext'
 import type { Role } from '../../types/User'
@@ -8,27 +8,31 @@ type MenuItemConfig = {
   label: string
   path: string
   roles: Role[]
+  disabled?: boolean
 }
 
 const MENU_ITEMS: MenuItemConfig[] = [
   { label: 'Dashboard', path: '/', roles: ['admin'] },
-  { label: 'Usuarios', path: '/admin/users', roles: ['admin'] },
-  { label: 'Servicios', path: '/admin/services/new', roles: ['admin', 'provider'] },
+  { label: 'Usuarios', path: '/admin/users', roles: ['admin'], disabled: true },
+  { label: 'Servicios', path: '/admin/services/new', roles: ['provider', 'admin'] },
   {
     label: 'Subscripciones de mis servicios',
     path: '/provider/subscriptions',
     roles: ['provider'],
+    disabled: true,
   },
-  { label: 'Mis suscripciones', path: '/subscriptions', roles: ['client'] },
+  { label: 'Mis suscripciones', path: '/subscriptions', roles: ['client'], disabled: true },
   {
     label: 'Historial de pagos',
     path: '/payments',
     roles: ['admin', 'provider', 'client'],
+    disabled: true,
   },
   {
     label: 'Notificaciones',
     path: '/notifications',
     roles: ['admin', 'provider', 'client'],
+    disabled: true,
   },
 ]
 
@@ -42,62 +46,98 @@ const AppNavbar: React.FC = () => {
   const visibleItems = useMemo(() => MENU_ITEMS.filter((item) => item.roles.includes(role)), [role])
 
   return (
-    <Box
+    <AppBar
+      position="sticky"
+      elevation={0}
       sx={{
-        width: '100%',
-        backgroundColor: '#f5f5f5',
-        borderBottom: '1px solid #ddd',
-        px: 3,
-        pt: '200px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        boxSizing: 'border-box',
+        borderBottom: '1px solid',
+        borderColor: 'divider',
+        '& .MuiButton-root.Mui-disabled': {
+          color: 'rgba(255,255,255,0.45)',
+        },
       }}
     >
-      {/* IZQUIERDA */}
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Typography variant="h6" sx={{ cursor: 'pointer' }} onClick={() => navigate('/')}>
-          Gestión de Suscripciones
-        </Typography>
-        <Typography variant="body2">
-          {user.email} | Rol: {role}
-        </Typography>
-      </Box>
-
-      {/* DERECHA */}
-      <Box
-        sx={{
-          display: 'flex',
-          gap: 1,
-          alignItems: 'center',
-          flexWrap: 'wrap',
-        }}
-      >
-        {visibleItems.map((item) => (
-          <Button
-            key={item.path}
-            color="primary"
-            size="small"
-            onClick={() => navigate(item.path)}
-            sx={{ textTransform: 'none' }}
+      <Container maxWidth="lg">
+        <Toolbar disableGutters sx={{ minHeight: 64, display: 'flex', gap: 2 }}>
+          {/* Izquierda */}
+          <Box
+            sx={{ display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
+            onClick={() => navigate('/')}
           >
-            {item.label}
-          </Button>
-        ))}
+            <Typography variant="h6" sx={{ lineHeight: 1.1 }}>
+              Gestión de Suscripciones
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
+              <Typography variant="caption" sx={{ opacity: 0.9 }}>
+                {user.email}
+              </Typography>
+              <Chip size="small" label={role} variant="outlined" />
+            </Box>
+          </Box>
 
-        <Button
-          color="inherit"
-          size="small"
-          onClick={() => {
-            logout()
-            navigate('/login')
-          }}
-        >
-          Cerrar sesión
-        </Button>
-      </Box>
-    </Box>
+          {/* Spacer */}
+          <Box sx={{ flex: 1 }} />
+
+          {/* Derecha */}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+              flexWrap: 'wrap',
+              justifyContent: 'flex-end',
+            }}
+          >
+            {visibleItems.map((item) => (
+              <Tooltip
+                key={item.path}
+                title={item.disabled ? 'En desarrollo' : ''}
+                disableHoverListener={!item.disabled}
+              >
+                <span>
+                  <Button
+                    color="inherit"
+                    size="small"
+                    variant="text"
+                    disabled={item.disabled}
+                    onClick={() => navigate(item.path)}
+                    sx={{ textTransform: 'none' }}
+                  >
+                    {item.label}
+                  </Button>
+                </span>
+              </Tooltip>
+            ))}
+
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => {
+                logout()
+                navigate('/login')
+              }}
+              sx={{
+                textTransform: 'none',
+                color: 'common.white',
+
+                // 👇 DISABLED REAL
+                '&.MuiButton-root.Mui-disabled': {
+                  color: 'rgba(255,255,255,0.45)',
+                  cursor: 'not-allowed',
+                },
+
+                // hover solo si NO está disabled
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.12)',
+                },
+              }}
+            >
+              Cerrar sesión
+            </Button>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   )
 }
 

@@ -12,10 +12,9 @@ function App() {
     <UserProvider>
       <BrowserRouter>
         <Routes>
-          {/* públicas */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterPage />} />
-          {/* protegidas */}
+
           <Route
             path="/"
             element={
@@ -26,10 +25,11 @@ function App() {
               </PrivateRoute>
             }
           />
+
           <Route
             path="/admin/services/new"
             element={
-              <PrivateRoute>
+              <PrivateRoute allowed={['admin', 'provider']} redirectTo="/">
                 <AppLayout>
                   <AdminCreateServicePage />
                 </AppLayout>

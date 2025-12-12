@@ -1,13 +1,28 @@
 import { FormEvent, useState } from 'react'
+import {
+  Box,
+  Paper,
+  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControlLabel,
+  Checkbox,
+  Button,
+  Alert,
+  Stack,
+} from '@mui/material'
 import { createService } from '../config/api.services'
-import { useUser } from '../context/UserContext' // ajustá el path si es distinto
+import { useUser } from '../context/UserContext'
 
 export default function AdminCreateServicePage() {
   const { user } = useUser()
-  const [provider, setProvider] = useState('')
+
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-  const [price, setPrice] = useState('')
+  const [price, setPrice] = useState<string>('')
   const [currency, setCurrency] = useState('USD')
   const [billingPeriod, setBillingPeriod] = useState('monthly')
   const [isActive, setIsActive] = useState(true)
@@ -38,6 +53,9 @@ export default function AdminCreateServicePage() {
       setName('')
       setDescription('')
       setPrice('')
+      setCurrency('USD')
+      setBillingPeriod('monthly')
+      setIsActive(true)
     } catch (err: any) {
       setError(err?.response?.data?.error || 'Error al crear servicio')
     } finally {
@@ -46,47 +64,108 @@ export default function AdminCreateServicePage() {
   }
 
   return (
-    <div style={{ maxWidth: 600, margin: '0 auto', padding: 40 }}>
-      <h1>Alta de Servicio</h1>
+    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+      <Paper
+        elevation={0}
+        sx={{
+          width: '100%',
+          maxWidth: 720,
+          border: '1px solid',
+          borderColor: 'divider',
+          borderRadius: 3,
+          p: { xs: 2.5, sm: 4 },
+        }}
+      >
+        <Stack spacing={2.5}>
+          <Box>
+            <Typography variant="h4" sx={{ fontWeight: 700 }}>
+              Alta de Servicio
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.8, mt: 0.5 }}>
+              Completá los datos para crear un nuevo servicio.
+            </Typography>
+          </Box>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {success && <p style={{ color: 'green' }}>{success}</p>}
+          {error && <Alert severity="error">{error}</Alert>}
+          {success && <Alert severity="success">{success}</Alert>}
 
-      <form onSubmit={handleSubmit}>
-        <input placeholder="Nombre" value={name} onChange={(e) => setName(e.target.value)} />
-        <textarea
-          placeholder="Descripción"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <input
-          placeholder="Precio"
-          type="number"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-        />
+          <Box component="form" onSubmit={handleSubmit}>
+            <Stack spacing={2}>
+              <TextField
+                label="Nombre"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                fullWidth
+                required
+              />
 
-        <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
-          <option value="USD">USD</option>
-          <option value="ARS">ARS</option>
-        </select>
+              <TextField
+                label="Descripción"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                fullWidth
+                required
+                multiline
+                minRows={3}
+              />
 
-        <select value={billingPeriod} onChange={(e) => setBillingPeriod(e.target.value)}>
-          <option value="monthly">Mensual</option>
-          <option value="yearly">Anual</option>
-        </select>
+              <TextField
+                label="Precio"
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                fullWidth
+                required
+                inputProps={{ min: 0, step: '0.01' }}
+              />
 
-        <label>
-          <input
-            type="checkbox"
-            checked={isActive}
-            onChange={(e) => setIsActive(e.target.checked)}
-          />
-          Activo
-        </label>
+              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="currency-label">Moneda</InputLabel>
+                  <Select
+                    labelId="currency-label"
+                    label="Moneda"
+                    value={currency}
+                    onChange={(e) => setCurrency(String(e.target.value))}
+                  >
+                    <MenuItem value="USD">USD</MenuItem>
+                    <MenuItem value="ARS">ARS</MenuItem>
+                  </Select>
+                </FormControl>
 
-        <button disabled={loading}>{loading ? 'Creando...' : 'Crear servicio'}</button>
-      </form>
-    </div>
+                <FormControl fullWidth>
+                  <InputLabel id="billing-label">Periodo</InputLabel>
+                  <Select
+                    labelId="billing-label"
+                    label="Periodo"
+                    value={billingPeriod}
+                    onChange={(e) => setBillingPeriod(String(e.target.value))}
+                  >
+                    <MenuItem value="monthly">Mensual</MenuItem>
+                    <MenuItem value="yearly">Anual</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+
+              <FormControlLabel
+                control={<Checkbox checked={isActive} onChange={(e) => setIsActive(e.target.checked)} />}
+                label="Activo"
+              />
+
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={loading}
+                  sx={{ textTransform: 'none' }}
+                >
+                  {loading ? 'Creando...' : 'Crear servicio'}
+                </Button>
+              </Box>
+            </Stack>
+          </Box>
+        </Stack>
+      </Paper>
+    </Box>
   )
 }
