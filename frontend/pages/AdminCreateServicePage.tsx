@@ -1,7 +1,9 @@
 import { FormEvent, useState } from 'react'
 import { createService } from '../config/api.services'
+import { useUser } from '../context/UserContext' // ajustá el path si es distinto
 
 export default function AdminCreateServicePage() {
+  const { user } = useUser()
   const [provider, setProvider] = useState('')
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
@@ -23,7 +25,7 @@ export default function AdminCreateServicePage() {
       setLoading(true)
 
       await createService({
-        provider,
+        provider: user.provider,
         name,
         description,
         price: Number(price),
@@ -33,7 +35,6 @@ export default function AdminCreateServicePage() {
       })
 
       setSuccess('Servicio creado correctamente')
-      setProvider('')
       setName('')
       setDescription('')
       setPrice('')
@@ -52,11 +53,6 @@ export default function AdminCreateServicePage() {
       {success && <p style={{ color: 'green' }}>{success}</p>}
 
       <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Provider ID"
-          value={provider}
-          onChange={(e) => setProvider(e.target.value)}
-        />
         <input placeholder="Nombre" value={name} onChange={(e) => setName(e.target.value)} />
         <textarea
           placeholder="Descripción"

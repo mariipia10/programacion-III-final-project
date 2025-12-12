@@ -24,7 +24,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     const normalized = String(raw || '')
       .toLowerCase()
       .trim()
-    const valid = ROLES.includes(normalized as Role) ? (normalized as Role) : 'user'
+    const valid = ROLES.includes(normalized as Role) ? (normalized as Role) : 'client'
     return valid
   }
 

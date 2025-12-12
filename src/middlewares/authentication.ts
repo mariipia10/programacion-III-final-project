@@ -22,6 +22,7 @@ function getToken(req: Request, next: NextFunction): string | void {
 
 function authentication(req: Request, res: Response, next: NextFunction): void {
   const publicPaths = ['/', '/status', '/register', '/auth/register', '/auth/login']
+  console.log('AUTH MIDDLEWARE HIT:', req.method, req.originalUrl)
 
   if (publicPaths.includes(req.path)) {
     return next()

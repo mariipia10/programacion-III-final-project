@@ -35,6 +35,7 @@ export interface JWTPayload {
   iat?: number
   exp?: number
   iss?: string
+  provider?: string | null
 }
 
 // Request Extensions - using module augmentation instead of namespace

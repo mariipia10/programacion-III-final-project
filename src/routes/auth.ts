@@ -37,7 +37,6 @@ async function createUserToken(
 
     console.log('Checking user password')
     const result = await user.checkPassword(req.body.password)
-
     if (result.isLocked) {
       console.error('User is locked. Sending 400 (Locked) to client')
       res.status(400).end()
@@ -51,6 +50,7 @@ async function createUserToken(
     }
 
     const response = await generateUserToken(req, user)
+    console.log(user)
 
     res.status(201).json(response)
   } catch (err) {

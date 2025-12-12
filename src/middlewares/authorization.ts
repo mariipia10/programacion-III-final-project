@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from 'express'
 interface AuthenticatedRequest extends Request {
   isAdmin(): boolean
   isClient(): boolean
+  isProvider(): boolean
 }
 
 function authorization(req: Request, res: Response, next: NextFunction): void {
@@ -15,6 +16,9 @@ function authorization(req: Request, res: Response, next: NextFunction): void {
 
   authReq.isClient = function isClient(): boolean {
     return !!(authReq.user && authReq.user.role === 'client')
+  }
+  authReq.isProvider = function isProvider(): boolean {
+    return !!(authReq.user && authReq.user.role === 'provider')
   }
 
   return next()

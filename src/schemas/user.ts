@@ -4,7 +4,6 @@ import { IUser, GovernmentIdType } from '../types/index'
 
 const { ObjectId } = Schema.Types
 
-// Email validation using regex (more secure than mongoose-validator)
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const emailValidator = {
   validator: function (v: string): boolean {

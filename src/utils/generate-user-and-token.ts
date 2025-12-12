@@ -11,6 +11,7 @@ interface UserResponse {
   email: string
   firstName: string
   lastName: string
+  provider?: string | null
 }
 
 interface TokenResponse {
@@ -25,7 +26,12 @@ async function generateUserToken(req: unknown, user: IUser): Promise<TokenRespon
     throw new Error('Role not found')
   }
 
-  const payload: JWTPayload = { _id: user._id.toString(), email: user.email, role: role.name }
+  const payload: JWTPayload = {
+    _id: user._id.toString(),
+    email: user.email,
+    role: role.name,
+    provider: user.provider ? user.provider.toString() : null,
+  }
 
   const userResponse: UserResponse = {
     _id: user._id.toString(),
@@ -33,6 +39,7 @@ async function generateUserToken(req: unknown, user: IUser): Promise<TokenRespon
     email: user.email,
     firstName: user.firstName,
     lastName: user.lastName,
+    provider: user.provider ? user.provider.toString() : null,
   }
 
   // const privateKey = fs.readFileSync(path.join(__dirname, `../keys/base-api-express-generator.pem`))

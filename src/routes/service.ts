@@ -20,25 +20,40 @@ async function getAllServices(req: Request, res: Response, next: NextFunction): 
 
 async function createService(req: Request, res: Response, next: NextFunction): Promise<void> {
   console.log('createService body:', req.body)
-  console.log('createService user:', req.user)
-  try {
-    const { provider, name, description, price, currency, billingPeriod, isActive } = req.body
+  console.log('role:', (req.user as any)?.role, 'provider:', (req.user as any)?.provider)
 
-    // Validaciones
-    if (!provider || !name || !description || price === undefined || !currency || !billingPeriod) {
+  try {
+    const { name, description, price, currency, billingPeriod, isActive } = req.body
+
+    const user = req.user as JWTPayload | undefined
+    console.log('createService user:', user)
+
+    if (!user) {
+      res.status(401).json({ error: 'Unauthorized' })
+      return
+    }
+
+    if (user.role !== 'admin' && user.role !== 'provider') {
+      res.status(403).json({ error: 'Forbidden: admin/provider only' })
+      return
+    }
+
+    const providerId = user.role === 'provider' ? user.provider : req.body.provider
+
+    if (
+      !providerId ||
+      !name ||
+      !description ||
+      price === undefined ||
+      !currency ||
+      !billingPeriod
+    ) {
       res.status(400).json({ error: 'Missing required fields' })
       return
     }
 
-    const user = req.user
-    console.log(user)
-    if (!user || user.role !== 'admin') {
-      res.status(403).json({ error: 'Forbidden: admin only' })
-      return
-    }
-
     const newService = await Service.create({
-      provider,
+      provider: providerId,
       name: name.trim(),
       description: description.trim(),
       price,
