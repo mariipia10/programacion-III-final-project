@@ -130,7 +130,6 @@ async function markRead(
       return
     }
 
-    // Si tu schema tiene isRead:
     ;(notif as any).isRead = true
 
     await notif.save()

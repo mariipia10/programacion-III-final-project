@@ -10,7 +10,7 @@ import {
   Chip,
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { getMyServices, ProviderService } from '../config/api.services'
+import { getMyServices, type ProviderService } from '../config/api.services'
 
 export default function ProviderMyServicesPage() {
   const [items, setItems] = useState<ProviderService[]>([])

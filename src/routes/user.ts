@@ -6,13 +6,11 @@ import Role from '../schemas/role'
 import { CreateUserRequest } from '../types/index'
 
 const router = express.Router()
+
 router.get('/', getAllUsers)
 router.get('/:id', getUserById)
-
 router.put('/:id', updateUser)
 router.delete('/:id', deleteUser)
-
-
 
 async function getAllUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
   console.log('getAllUsers by user ', req.user?._id)
@@ -49,8 +47,6 @@ async function getUserById(
     next(err)
   }
 }
-
-
 
 async function updateUser(
   req: Request<{ id: string }, unknown, Partial<CreateUserRequest>>,

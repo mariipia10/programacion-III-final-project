@@ -89,7 +89,6 @@ export default function MySubscriptionsPage() {
                     gap: 2,
                   }}
                 >
-                  {/* Info */}
                   <Box>
                     <Typography variant="subtitle1">{service?.name ?? 'Servicio'}</Typography>
 
@@ -108,7 +107,6 @@ export default function MySubscriptionsPage() {
                     )}
                   </Box>
 
-                  {/* Acción */}
                   {sub.status === 'active' && (
                     <Button variant="outlined" color="error" onClick={() => onCancel(sub._id)}>
                       Dar de baja

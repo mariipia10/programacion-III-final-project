@@ -4,8 +4,6 @@ import { CreateProviderRequest } from '../types/index'
 
 const router = Router()
 
-//router.get('/', getProviders)
-//router.get('/:id', getProviderById)
 router.post('/', createProvider)
 router.put('/:id', updateProvider)
 

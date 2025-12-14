@@ -134,7 +134,6 @@ export interface INotification {
   type: NotificationType
 }
 
-
 // Provider Types
 export interface IProvider extends Document {
   _id: Types.ObjectId

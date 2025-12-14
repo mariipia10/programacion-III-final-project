@@ -93,11 +93,7 @@ async function createSubscription(
       subscription: subscription._id,
       isRead: false,
     })
-    // } catch (e) {
-    //   console.error('Notification create failed:', e)
-    // }
-    console.log('SUB CREATED OK', subscription._id)
-    console.log('NOTIF ABOUT TO CREATE FOR USER', user._id)
+
     res.status(201).send(subscription)
   } catch (err) {
     next(err)

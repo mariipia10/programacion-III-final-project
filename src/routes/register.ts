@@ -40,11 +40,9 @@ async function createUser(
     let providerId: string | undefined
 
     if (user.role === 'provider') {
-      // ✅ Si viene un ObjectId válido, lo uso como referencia
       if (user.provider && mongoose.isValidObjectId(user.provider)) {
         providerId = user.provider
       } else {
-        // ✅ Si NO es ObjectId, lo trato como nombre y creo Provider
         const providerName =
           (user as any).providerName?.trim() ||
           (typeof user.provider === 'string' ? user.provider.trim() : '') ||

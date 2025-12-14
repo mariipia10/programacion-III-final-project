@@ -137,7 +137,6 @@ async function getServiceSubscribers(
       return
     }
 
-    // 🔐 Autorización
     if (user.role === 'provider') {
       if (!user.provider) {
         res.status(400).json({ error: 'Provider not linked to user' })
@@ -153,7 +152,6 @@ async function getServiceSubscribers(
       return
     }
 
-    // 👇 Suscripciones activas + datos del usuario
     const subscriptions = await Subscription.find({
       service: service._id,
       status: 'active',

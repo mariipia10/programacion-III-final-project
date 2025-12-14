@@ -156,12 +156,6 @@ export default function RegisterPage() {
 
                 setSuccessMsg('Usuario registrado correctamente. Ahora podés iniciar sesión.')
               } else {
-                // const provider = await createProvider({
-                //   name: values.providerName || `${values.firstName} ${values.lastName}`,
-                //   contactEmail: values.email.toLowerCase().trim(),
-                //   isActive: true,
-                // })
-
                 await registerUser({
                   ...baseUserPayload,
                   role: 'provider',
