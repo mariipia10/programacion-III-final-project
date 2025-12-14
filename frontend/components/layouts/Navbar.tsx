@@ -11,18 +11,11 @@ type MenuItemConfig = {
   disabled?: boolean
 }
 
-
 const MENU_ITEMS: MenuItemConfig[] = [
   { label: 'Dashboard', path: '/', roles: ['admin'] },
   { label: 'Usuarios', path: '/admin/users', roles: ['admin'], disabled: true },
   { label: 'Servicios', path: '/admin/services/new', roles: ['provider', 'admin'] },
-  {
-    label: 'Subscripciones de mis servicios',
-    path: '/provider/subscriptions',
-    roles: ['provider'],
-    disabled: true,
-  },
-  { label: 'Mis suscripciones', path: '/subscriptions', roles: ['client'], disabled: true },
+  { label: 'Mis servicios', path: '/provider/services', roles: ['provider'] },
   {
     label: 'Historial de pagos',
     path: '/payments',
@@ -32,8 +25,7 @@ const MENU_ITEMS: MenuItemConfig[] = [
   {
     label: 'Notificaciones',
     path: '/notifications',
-    roles: ['admin', 'provider', 'client'],
-    disabled: true,
+    roles: ['client'],
   },
   { label: 'Servicios disponibles', path: '/services', roles: ['client'] },
   { label: 'Mis suscripciones', path: '/subscriptions', roles: ['client'] },

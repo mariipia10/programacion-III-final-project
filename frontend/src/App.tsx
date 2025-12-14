@@ -8,6 +8,9 @@ import RegisterPage from '../pages/RegisterPage'
 import AdminCreateServicePage from '../pages/AdminCreateServicePage'
 import ClientServicesPage from '../pages/ClientServicePage'
 import SubscriptionListPage from '../pages/SubscriptionListPage'
+import NotificationsPage from '../pages/NotificationsPage'
+import ProviderMyServicesPage from '../pages/ProviderMyServicesPage.tsx'
+import ProviderServiceSubscribersPage from '../pages/ProviderServiceSubscribersPage.tsx'
 
 function App() {
   return (
@@ -54,6 +57,37 @@ function App() {
               <PrivateRoute allowed={['client']} redirectTo="/">
                 <AppLayout>
                   <SubscriptionListPage />
+                </AppLayout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              <PrivateRoute allowed={['admin', 'provider', 'client']} redirectTo="/">
+                <AppLayout>
+                  <NotificationsPage />
+                </AppLayout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/provider/services"
+            element={
+              <PrivateRoute allowed={['provider', 'admin']} redirectTo="/">
+                <AppLayout>
+                  <ProviderMyServicesPage />
+                </AppLayout>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/provider/services/:id/subscribers"
+            element={
+              <PrivateRoute allowed={['provider', 'admin']} redirectTo="/">
+                <AppLayout>
+                  <ProviderServiceSubscribersPage />
                 </AppLayout>
               </PrivateRoute>
             }

@@ -1,4 +1,4 @@
-import { Document, Types } from 'mongoose'
+import { Document, Model, Types } from 'mongoose'
 
 // User Types
 export interface IUser extends Document {
@@ -115,21 +115,25 @@ export interface IPayment extends Document {
 }
 
 // Notification Types
-export type NotificationType = 'renewal_reminder' | 'payment_failed' | 'generic'
+export type NotificationType =
+  | 'renewal_due_soon'
+  | 'subscription_expired'
+  | 'subscription_canceled'
+  | 'subscription_created'
+  | 'payment_failed'
+  | 'system'
 
-export interface INotification extends Document {
-  _id: Types.ObjectId
+export interface INotification {
   user: Types.ObjectId
   title: string
   message: string
-  subscription?: Types.ObjectId
-  payment?: Types.ObjectId
-  createdAt?: Date
-  updatedAt?: Date
+  isRead: boolean
+  subscription?: string
+  payment?: string
+  meta?: Record<string, any>
+  type: NotificationType
 }
 
-//Provider Types
-// ...existing code...
 
 // Provider Types
 export interface IProvider extends Document {
@@ -142,8 +146,6 @@ export interface IProvider extends Document {
   createdAt?: Date
   updatedAt?: Date
 }
-
-// Request type for creating a provider (without auto-generated fields)
 export interface CreateProviderRequest {
   name: string
   description?: string

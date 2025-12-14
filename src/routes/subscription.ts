@@ -3,6 +3,8 @@ import Subscription from '../schemas/subscription'
 import Service from '../schemas/service'
 import authentication from '../middlewares/authentication'
 import { IService } from '@/types'
+import Notification from '../schemas/notification'
+import mongoose from 'mongoose'
 
 const router = express.Router()
 
@@ -83,6 +85,19 @@ async function createSubscription(
       autoRenew: autoRenew ?? true,
     })
 
+    await Notification.create({
+      user: new mongoose.Types.ObjectId(user._id),
+      type: 'subscription_created',
+      title: 'Suscripción creada',
+      message: `Te suscribiste a ${(service as IService).name}.`,
+      subscription: subscription._id,
+      isRead: false,
+    })
+    // } catch (e) {
+    //   console.error('Notification create failed:', e)
+    // }
+    console.log('SUB CREATED OK', subscription._id)
+    console.log('NOTIF ABOUT TO CREATE FOR USER', user._id)
     res.status(201).send(subscription)
   } catch (err) {
     next(err)
