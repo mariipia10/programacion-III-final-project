@@ -12,7 +12,6 @@ import serviceRouter from './routes/service'
 import subscriptionRouter from './routes/subscription'
 import providerRouter from './routes/provider'
 import notificationRouter from './routes/notification'
-import paymentRouter from './routes/payment'
 import registerRouter from './routes/register'
 
 const app = express()
@@ -37,6 +36,5 @@ app.use('/services', serviceRouter)
 app.use('/subscriptions', subscriptionRouter)
 app.use('/providers', providerRouter)
 app.use('/notifications', notificationRouter)
-app.use('/payments', paymentRouter)
 
 export default app
