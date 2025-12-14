@@ -83,22 +83,6 @@ export interface EnvironmentVariables {
   JWT_ISSUER?: string
 }
 
-// Service Types
-export type ServiceCategory = 'streaming' | 'software' | 'course' | 'other'
-export type BillingCycle = 'monthly' | 'yearly'
-
-export interface IService extends Document {
-  _id: Types.ObjectId
-  name: string
-  description?: string
-  category: ServiceCategory
-  price: number
-  billingCycle: BillingCycle
-  isActive: boolean
-  createdAt?: Date
-  updatedAt?: Date
-}
-
 // Subscription Types
 export type SubscriptionStatus = 'active' | 'canceled' | 'expired' | 'pending'
 
@@ -168,7 +152,6 @@ export interface CreateProviderRequest {
   isActive?: boolean
 }
 
-// ...existing code...
 //Service Types
 export type BillingPeriod = 'monthly' | 'yearly'
 

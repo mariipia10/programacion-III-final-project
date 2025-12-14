@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express'
 import Subscription from '../schemas/subscription'
 import Service from '../schemas/service'
 import authentication from '../middlewares/authentication'
+import { IService } from '@/types'
 
 const router = express.Router()
 
@@ -23,7 +24,7 @@ function getNextBillingDate(start: Date, billingCycle: 'monthly' | 'yearly'): Da
 
 router.post('/', authentication, createSubscription)
 router.get('/', authentication, getSubscriptions)
-
+router.patch('/:id/cancel', authentication, cancelSubscription)
 async function createSubscription(
   req: Request<Record<string, never>, unknown, CreateSubscriptionRequest>,
   res: Response,
@@ -36,7 +37,7 @@ async function createSubscription(
 
     if (!serviceId) {
       res.status(400).json({ error: 'serviceId is required' }).end()
-      
+
       return
     }
 
@@ -70,9 +71,8 @@ async function createSubscription(
     }
 
     const startDate = new Date()
-    const billingCycle =
-      (service as { billingCycle?: 'monthly' | 'yearly' }).billingCycle || 'monthly'
-    const nextBillingDate = getNextBillingDate(startDate, billingCycle)
+    const billingPeriod = (service as IService).billingPeriod
+    const nextBillingDate = getNextBillingDate(startDate, billingPeriod)
 
     const subscription = await Subscription.create({
       user: user._id,
@@ -101,6 +101,46 @@ async function getSubscriptions(req: Request, res: Response, next: NextFunction)
 
     const subscriptions = await Subscription.find({ user: user._id }).populate('service')
     res.send(subscriptions)
+  } catch (err) {
+    next(err)
+  }
+}
+
+async function cancelSubscription(req: Request<{ id: string }>, res: Response, next: NextFunction) {
+  try {
+    const user = req.user
+    if (!user) {
+      res.status(401).json({ error: 'Unauthorized' })
+      return
+    }
+
+    if (user.role !== 'client') {
+      res.status(403).json({ error: 'Only clients can cancel subscriptions' })
+      return
+    }
+
+    const subscription = await Subscription.findById(req.params.id)
+    if (!subscription) {
+      res.status(404).json({ error: 'Subscription not found' })
+      return
+    }
+
+    if (subscription.user.toString() !== user._id.toString()) {
+      res.status(403).json({ error: 'Forbidden' })
+      return
+    }
+
+    if (subscription.status === 'canceled') {
+      res.status(400).json({ error: 'Subscription already canceled' })
+      return
+    }
+
+    subscription.status = 'canceled'
+    subscription.endDate = new Date()
+    subscription.autoRenew = false
+    await subscription.save()
+
+    res.send(subscription)
   } catch (err) {
     next(err)
   }

@@ -2,6 +2,7 @@
 import express, { Request, Response, NextFunction } from 'express'
 import Service from '../schemas/service'
 import authentication from '../middlewares/authentication'
+import { JWTPayload } from '@/types'
 
 const router = express.Router()
 

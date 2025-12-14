@@ -11,6 +11,7 @@ type MenuItemConfig = {
   disabled?: boolean
 }
 
+
 const MENU_ITEMS: MenuItemConfig[] = [
   { label: 'Dashboard', path: '/', roles: ['admin'] },
   { label: 'Usuarios', path: '/admin/users', roles: ['admin'], disabled: true },
@@ -34,6 +35,8 @@ const MENU_ITEMS: MenuItemConfig[] = [
     roles: ['admin', 'provider', 'client'],
     disabled: true,
   },
+  { label: 'Servicios disponibles', path: '/services', roles: ['client'] },
+  { label: 'Mis suscripciones', path: '/subscriptions', roles: ['client'] },
 ]
 
 const AppNavbar: React.FC = () => {
